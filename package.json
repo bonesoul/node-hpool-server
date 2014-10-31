@@ -1,6 +1,6 @@
 {
     "name": "hpool-server",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "High performance pooled mining server",
     "license": "GPL-3.0",
     "keywords": [
@@ -23,7 +23,7 @@
     "author": "Huseyin Uslu <shalafiraistlin@gmail.com> (http://www.coinium.org)",
     "dependencies": {
         "colors": "^1.0.3",
-        "hpool-stratum": "~0.0.1"
+        "hpool-stratum": "~0.0.3"
     },
     "devDependencies": {
         "mocha": "~2.0.1"
