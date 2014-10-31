@@ -1,3 +1,3 @@
-﻿# hpool
+﻿# hpool-server
 
 
