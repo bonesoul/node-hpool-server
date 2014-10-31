@@ -23,7 +23,7 @@
         "email": "huseyin@coinium.org"
     },
     "dependencies": {
-        "hpool-stratum": "https://github.com/int6/hpool-stratum.git",
+        "hpool-stratum": "git://github.com/int6/hpool-stratum.git",
         "express": "^3.18.2",
         "jade": "*",
         "stylus": "*"
