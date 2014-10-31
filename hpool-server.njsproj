@@ -31,46 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="server.js" />
-    <Compile Include="routes\index.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="public\javascripts\bootstrap.js" />
-    <Content Include="public\javascripts\bootstrap.min.js" />
-    <Content Include="public\javascripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="public\javascripts\jquery-1.10.2.js" />
-    <Content Include="public\javascripts\jquery-1.10.2.min.js" />
-    <Content Include="public\javascripts\jquery.validate-vsdoc.js" />
-    <Content Include="public\javascripts\jquery.validate.js" />
-    <Content Include="public\javascripts\jquery.validate.min.js" />
-    <Content Include="public\javascripts\jquery.validate.unobtrusive.js" />
-    <Content Include="public\javascripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="public\javascripts\modernizr-2.6.2.js" />
-    <Content Include="public\javascripts\respond.js" />
-    <Content Include="public\javascripts\respond.min.js" />
-    <Content Include="public\javascripts\_references.js" />
     <Content Include="package.json" />
-    <Content Include="public\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="public\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="public\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="public\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="public\javascripts\jquery-1.10.2.min.map" />
-    <Content Include="public\stylesheets\bootstrap.css" />
-    <Content Include="public\stylesheets\bootstrap.min.css" />
-    <Content Include="public\stylesheets\style.styl" />
     <Content Include="README.md" />
-    <Content Include="views\contact.jade" />
-    <Content Include="views\about.jade" />
-    <Content Include="views\index.jade" />
-    <Content Include="views\layout.jade" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="public\" />
-    <Folder Include="public\fonts\" />
-    <Folder Include="public\images\" />
-    <Folder Include="public\javascripts\" />
-    <Folder Include="public\stylesheets\" />
-    <Folder Include="routes\" />
-    <Folder Include="views\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
   <ProjectExtensions>
