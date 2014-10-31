@@ -23,10 +23,7 @@
     "author": "Huseyin Uslu <shalafiraistlin@gmail.com> (http://www.coinium.org)",
     "dependencies": {
         "colors": "^1.0.3",
-        "express": "^3.18.2",
-        "hpool-stratum": "~0.0.1",
-        "jade": "*",
-        "stylus": "*"
+        "hpool-stratum": "~0.0.1"
     },
     "devDependencies": {
         "mocha": "~2.0.1"
