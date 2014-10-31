@@ -31,3 +31,4 @@ node_modules
 .ntvs_analysis.dat
 *.suo
 [Oo]bj/
+[Bb]in/
