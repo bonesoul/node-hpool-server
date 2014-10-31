@@ -29,3 +29,5 @@ node_modules
 
 # extra
 .ntvs_analysis.dat
+*.suo
+[Oo]bj/
