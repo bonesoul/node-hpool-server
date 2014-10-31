@@ -9,7 +9,7 @@
         "json",
         "json-rpc"
     ],
-    "os": [ "linux", "darwin", "!win32" ],
+    "os": [ "linux", "darwin", "win32" ],
     "cpu": [ "x64", "ia32", "arm", "mips" ],
     "main": "server.js",
     "homepage": "https://github.com/int6/hpool-server",
