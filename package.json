@@ -9,7 +9,7 @@
         "json",
         "json-rpc"
     ],
-    "main": "app.js",
+    "main": "server.js",
     "homepage": "https://github.com/int6/hpool-server",
     "repository": {
         "type": "git",
