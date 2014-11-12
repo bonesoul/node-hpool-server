@@ -18,9 +18,9 @@
 //     Alternatively, you can license this software under a commercial
 //     license or white-label it as set out in licenses/commercial.txt.
 
-var StratumServer = require('hpool-stratum/lib/stratumServer.js');
+var Pool = require('hpool-stratum/lib/pool.js');
 var colors = require("colors");
-var pkgJson = require('./package.json');
+var pkgJson = require('../package.json');
 
 console.log("");
 console.log(" ██╗  ██╗██████╗  ██████╗  ██████╗ ██╗     ".yellow);
@@ -40,4 +40,4 @@ console.log(" DOGE: DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr".yellow);
 console.log(" RDD : Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr".yellow);
 console.log("");
 
-var server = new StratumServer();
+var pool = new Pool().start();

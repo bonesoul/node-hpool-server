@@ -9,29 +9,46 @@
         "json",
         "json-rpc"
     ],
-    "os": [ "linux", "darwin", "win32" ],
-    "cpu": [ "x64", "ia32", "arm", "mips" ],
-    "main": "server.js",
+    "os": [
+        "linux",
+        "darwin",
+        "win32"
+    ],
+    "cpu": [
+        "x64",
+        "ia32",
+        "arm",
+        "mips"
+    ],
+    "main": "src/server.js",
     "homepage": "https://github.com/int6/hpool-server",
+    "author": "Huseyin Uslu <shalafiraistlin@gmail.com> (http://www.coinium.org)",
     "repository": {
         "type": "git",
         "url": "https://github.com/int6/hpool-server.git"
     },
     "bugs": {
         "url": "https://github.com/int6/hpool-server/issues"
-    },
-    "author": "Huseyin Uslu <shalafiraistlin@gmail.com> (http://www.coinium.org)",
+    },   
     "dependencies": {
         "colors": "^1.0.3",
         "hpool-stratum": "~0.0.3"
     },
     "devDependencies": {
-        "mocha": "~2.0.1"
+        "mocha": "~2.0.1",
+        "should": "*",
+        "mitm": "*",
+        "jshint": "*",
+        "jscs": "*",
+        "istanbul": "*"
     },
-    "optionalDependencies": { },
     "scripts": {
-        "start": "node server.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "node src/server.js",
+        "lint": "./node_modules/.bin/jshint .",
+        "checkStyle": "./node_modules/.bin/jscs .",
+        "test": "make test",
+        "posttest": "./node_modules/.bin/istanbul check-coverage && rm -rf coverage",
+        "postinstall": "make test"    
     },
     "engines": {
         "node": ">=0.10",
