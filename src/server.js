@@ -1,4 +1,4 @@
-﻿// 
+// 
 //     hpool-stratum - sratum protocol module for hpool-server
 //     Copyright (C) 2013 - 2014, hpool project 
 //     http://www.hpool.org - https://github.com/int6/hpool-stratum
