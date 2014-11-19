@@ -1,6 +1,6 @@
 {
     "name": "hpool-server",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "High performance pooled mining server",
     "license": "GPL-3.0",
     "keywords": [
@@ -47,8 +47,7 @@
         "lint": "./node_modules/.bin/jshint .",
         "checkStyle": "./node_modules/.bin/jscs .",
         "test": "make test",
-        "posttest": "./node_modules/.bin/istanbul check-coverage && rm -rf coverage",
-        "postinstall": "make test"    
+        "posttest": "./node_modules/.bin/istanbul check-coverage && rm -rf coverage"
     },
     "engines": {
         "node": ">=0.10",
