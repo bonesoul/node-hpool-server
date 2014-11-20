@@ -33,7 +33,9 @@
     "dependencies": {
         "colors": "^1.0.3",
         "hpool-stratum": "~0.0.3",
-        "winston": "*"        
+        "winston": "*",
+	"posix": "*",
+	"userid": "*"
     },
     "devDependencies": {
         "mocha": "~2.0.1",

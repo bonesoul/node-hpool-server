@@ -20,6 +20,7 @@
 
 var fs = require('fs');
 var os = require('os');
+var userid = require('userid');
 var winston = require('winston');
 var colors = require("colors");
 var Pool = require('hpool-stratum/lib/pool.js');
@@ -72,7 +73,7 @@ try {
         // Set our server's uid to that user
         if (uid) {
             process.setuid(uid); // fall-back to the actual user that started the server with sudo.
-            winston.log('info', 'Raised connection limit to 100k, falling back to non-root user: %sd', process.getuid());
+            winston.log('info', 'Raised connection limit to 100k, falling back to non-root user: %s', userid.username(process.getuid()));
         }
     }
 } catch (e) {
