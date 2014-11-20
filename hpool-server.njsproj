@@ -36,12 +36,14 @@
     <Compile Include="src\server.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config\config.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="test\mocha.opts" />
     <Content Include=".travis.yml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="config\" />
     <Folder Include="test\" />
     <Folder Include="src\" />
   </ItemGroup>
