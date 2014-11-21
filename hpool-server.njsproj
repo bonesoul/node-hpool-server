@@ -36,7 +36,9 @@
     <Compile Include="src\server.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config\coin\earthcoin.json" />
     <Content Include="config\config.json" />
+    <Content Include="config\pool\earthcoin.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="test\mocha.opts" />
@@ -44,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="config\" />
+    <Folder Include="config\coin\" />
+    <Folder Include="config\pool\" />
     <Folder Include="test\" />
     <Folder Include="src\" />
   </ItemGroup>

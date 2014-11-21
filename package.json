@@ -29,13 +29,15 @@
     },
     "bugs": {
         "url": "https://github.com/int6/hpool-server/issues"
-    },   
+    },
     "dependencies": {
         "colors": "^1.0.3",
         "hpool-stratum": "~0.0.3",
         "winston": "*",
-	"posix": "*",
-	"userid": "*"
+        "jsonminify": "*"
+    },
+    "optionalDependencies": {
+        "posix": "*"
     },
     "devDependencies": {
         "mocha": "~2.0.1",

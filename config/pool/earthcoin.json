@@ -1,0 +1,12 @@
+{
+    "enabled": true,
+    "coin": "earthcoin.json",
+    "daemon": 
+    {
+        "host": "localhost",
+        "port": 9337,
+        "username": "user",
+        "password": "password",
+        "timeout": 30000
+    }
+}
