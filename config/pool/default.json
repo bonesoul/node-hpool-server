@@ -1,0 +1,21 @@
+﻿{
+    "daemon": {
+        "host": "localhost",
+        "timeout": 30000
+    },
+    "poller": {
+        "interval": 1000
+    },
+    "stratum": {
+        "enabled": true,
+        "diff": 16,
+        "vardiff": {
+            "enabled": true,
+            "minDiff": 8,
+            "maxDiff": 512,
+            "targetTime": 15,
+            "retargetTime": 90,
+            "variancePercent": 30
+        }
+    }
+}

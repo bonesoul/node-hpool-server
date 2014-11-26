@@ -34,11 +34,12 @@
     <Compile Include=".jshintrc" />
     <Compile Include="Makefile" />
     <Compile Include="src\server.js" />
-    <Compile Include="src\workers\pool.js" />
+    <Compile Include="src\worker\pool.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config\coin\earthcoin.json" />
     <Content Include="config\config.json" />
+    <Content Include="config\pool\default.json" />
     <Content Include="config\pool\sample.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
@@ -49,7 +50,7 @@
     <Folder Include="config\" />
     <Folder Include="config\coin\" />
     <Folder Include="config\pool\" />
-    <Folder Include="src\workers\" />
+    <Folder Include="src\worker\" />
     <Folder Include="test\" />
     <Folder Include="src\" />
   </ItemGroup>

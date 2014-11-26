@@ -1,5 +1,5 @@
 // 
-//     hpool-stratum - sratum protocol module for hpool-server
+//     hpool-server - stratum server software
 //     Copyright (C) 2013 - 2014, hpool project 
 //     http://www.hpool.org - https://github.com/int6/hpool-stratum
 // 
@@ -17,6 +17,7 @@
 // 
 //     Alternatively, you can license this software under a commercial
 //     license or white-label it as set out in licenses/commercial.txt.
+//
 
 var fs = require('fs');
 var path = require('path');
@@ -25,46 +26,26 @@ var cluster = require('cluster');
 var winston = require('winston');
 var colors = require("colors");
 var jsonminify = require("jsonminify");
+var merge = require('merge');
 
-var algorithms = require('hpool-stratum/lib/algorithms.js');
 var serverModule = require('../package.json');
 var stratumModule = require('hpool-stratum/package.json');
-var poolWorker = require('./workers/pool.js');
+var algorithms = require('hpool-stratum/lib/algorithms.js');
+var poolWorker = require('./worker/pool.js');
 
 var _this = this;
 
 if (cluster.isMaster) {
 
-    Initialize();
-    _this.poolConfigs = readPoolConfigs();
-    spawnPools();
-    
-    cluster.on('fork', function (worker) {
-        console.log('worker ' + worker.process.pid + ' forked');
-    });
-    
-    cluster.on('exit', function (worker, code, signal) {
-        console.log('worker ' + worker.process.pid + ' died');
-    });
-    
-    cluster.on('listening', function (worker, address) {
-        console.log("A worker is now connected to " + address.address + ":" + address.port);
-    });
-    
-    cluster.on('disconnect', function (worker) {
-        console.log('The worker #' + worker.id + ' has disconnected');
-    });
-    
-    cluster.on('online', function (worker) {
-        console.log("Yay, the worker responded after it was forked");
-    });
-} 
+    initialize();
+    readPoolConfigs();
+    setupCluster();
+}
 else if (cluster.isWorker) {
-    console.log("WWWW");
-    new poolWorker();
+    runWorker();
 }
 
-function Initialize() {
+function initialize() {
     
     console.log("");
     console.log(" ██╗  ██╗██████╗  ██████╗  ██████╗ ██╗     ".yellow);
@@ -121,11 +102,14 @@ function readPoolConfigs() {
     
     var poolConfigDir = "config/pool/";
     var coinConfigDir = "config/coin/";
-    var configs = [];
+
+    _this.defaultPoolConfig = {};
+    _this.poolConfigs = [];
     
     // loop through pool configuration files
     fs.readdirSync(poolConfigDir).forEach(function (file) {
         try {
+
             // make sure the file exists and is a json file
             if (!fs.existsSync(poolConfigDir + file) || path.extname(poolConfigDir + file) !== '.json')
                 return;
@@ -133,6 +117,12 @@ function readPoolConfigs() {
             // read the configuration file.
             var poolConfigData = fs.readFileSync(poolConfigDir + file, { encoding: 'utf8' });
             var poolConfig = JSON.parse(JSON.minify(poolConfigData)); // clean out the file and try parsing then.
+            
+            // check if we are loading the default.json
+            if (file === 'default.json') {
+                _this.defaultPoolConfig = poolConfig;
+                return;  // skip further checks for default.json
+            }
             
             // make sure the pool configuration is enabled
             if (!poolConfig.enabled)
@@ -153,25 +143,74 @@ function readPoolConfigs() {
                 winston.log('error', 'Pool is configured to use an unsupported algorithm: %s', poolConfig.coin.algorithm);
             }
             
+            // merge the pool config with default.json
+            var mergedConfig = merge.recursive(true, _this.defaultPoolConfig, poolConfig);
+            
             // add pool configuration
-            configs.push(poolConfig);
+            _this.poolConfigs.push(mergedConfig);
 
         } catch (err) {
             winston.log('error', 'Error reading pool configuration file ' + file +"; " +  err);
         }
     });
 
-    return configs;
 }
 
-function spawnPools() {
+function createWorker() {
 
-    _this.poolConfigs.forEach(function (config) {
+    var worker = cluster.fork({
+        configs: JSON.stringify(_this.poolConfigs)
+    });
+}
 
-        cluster.fork({
-            config: config
-        });
+function runWorker() {
+    new poolWorker();
+}
 
+function setupCluster() {
+    
+    var totalForks = (function () {
+        //return os.cpus().length;
+        return 1;
+    })();
+
+    var i = 0;
+
+    var spawnInterval = setInterval(function() {
+        createWorker();
+        i++;
+
+        if (i === totalForks) {
+            clearInterval(spawnInterval);
+            winston.log('info', 'Spawned %d pool(s) on %d thread(s)', Object.keys(_this.poolConfigs).length, totalForks);
+        }
+
+    }, 250);
+           
+    cluster.on('exit', function (worker, code, signal) {
+
+        winston.log('warn', 'Pool worker [pid: %d] died, will respawn..', worker.process.pid);
+
+        setTimeout(function () {
+            createWorker();
+        }, 2000);
+
+    });
+    
+    cluster.on('fork', function (worker) {
+        winston.log('debug', 'Forked new pool worker [pid: %d]', worker.process.pid);
+    });
+
+    cluster.on('online', function (worker) {
+        winston.log('debug', 'Pool worker online: [pid: %d]', worker.process.pid);
+    });
+    
+    cluster.on('listening', function (worker, address) {
+        winston.log('debug', 'A worker is now connected to %s:%d', address.address, address.port);
+    });
+    
+    cluster.on('disconnect', function (worker) {
+        winston.log('debug','The worker #' + worker.id + ' has disconnected');
     });
 }
 

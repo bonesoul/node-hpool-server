@@ -34,7 +34,8 @@
         "colors": "^1.0.3",
         "hpool-stratum": "~0.0.3",
         "winston": "*",
-        "jsonminify": "*"
+        "jsonminify": "*",
+        "merge": "*"
     },
     "optionalDependencies": {
         "posix": "*"

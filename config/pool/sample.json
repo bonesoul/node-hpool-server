@@ -1,12 +1,16 @@
 {
-    "enabled": false,
+    "enabled": true,
     "coin": "earthcoin.json",
     "daemon": 
     {
-        "host": "localhost",
         "port": 9337,
         "username": "user",
-        "password": "password",
-        "timeout": 30000
+        "password": "password"
+    },
+    "wallet": {
+        "address": "n1DdGwwc3fFX4wP7aS7wvVFvaGLocoUGna"
+    },    
+    "stratum": {
+        "port": 3337
     }
 }
