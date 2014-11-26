@@ -13,6 +13,7 @@
     <ProjectGuid>cc1ca297-7e9b-458e-9247-0bca68f628fa</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>src\server.js</StartupFile>
+    <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +22,6 @@
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <ProjectView>ProjectFiles</ProjectView>
     <NodejsPort>1337</NodejsPort>
-    <StartWebBrowser>true</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,11 +34,12 @@
     <Compile Include=".jshintrc" />
     <Compile Include="Makefile" />
     <Compile Include="src\server.js" />
+    <Compile Include="src\workers\pool.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config\coin\earthcoin.json" />
     <Content Include="config\config.json" />
-    <Content Include="config\pool\earthcoin.json" />
+    <Content Include="config\pool\sample.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="test\mocha.opts" />
@@ -48,6 +49,7 @@
     <Folder Include="config\" />
     <Folder Include="config\coin\" />
     <Folder Include="config\pool\" />
+    <Folder Include="src\workers\" />
     <Folder Include="test\" />
     <Folder Include="src\" />
   </ItemGroup>

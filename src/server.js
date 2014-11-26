@@ -21,65 +21,100 @@
 var fs = require('fs');
 var path = require('path');
 var os = require('os');
+var cluster = require('cluster');
 var winston = require('winston');
 var colors = require("colors");
 var jsonminify = require("jsonminify");
-var Pool = require('hpool-stratum/lib/pool.js');
+
 var algorithms = require('hpool-stratum/lib/algorithms.js');
 var serverModule = require('../package.json');
 var stratumModule = require('hpool-stratum/package.json');
+var poolWorker = require('./workers/pool.js');
 
+var _this = this;
 
-console.log("");
-console.log(" ██╗  ██╗██████╗  ██████╗  ██████╗ ██╗     ".yellow);
-console.log(" ██║  ██║██╔══██╗██╔═══██╗██╔═══██╗██║     ".yellow);
-console.log(" ███████║██████╔╝██║   ██║██║   ██║██║     ".yellow);
-console.log(" ██╔══██║██╔═══╝ ██║   ██║██║   ██║██║     ".yellow);
-console.log(" ██║  ██║██║     ╚██████╔╝╚██████╔╝███████╗".yellow);
-console.log(" ╚═╝  ╚═╝╚═╝      ╚═════╝  ╚═════╝ ╚══════╝".yellow);
-console.log("");
-console.log("Copyright (C) 2013 - 2014, Coinium project - http://www.coinium.org".magenta);
-console.log("hpool comes with ABSOLUTELY NO WARRANTY. ".bgRed);
-console.log("");
-console.log("You can contribute the development of the project by donating;".green);
-console.log(" BTC : 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D".yellow);
-console.log(" LTC : LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa".yellow);
-console.log(" DOGE: DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr".yellow);
-console.log(" RDD : Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr".yellow);
-console.log("");
+if (cluster.isMaster) {
 
-winston.log('info', "Loaded dependencies; server %s, stratum %s", serverModule.version, stratumModule.version);
-winston.log('info', 'Running on: %s-%s [%s %s]', os.platform(), os.arch(), os.type(), os.release());
-winston.log('info', 'Running over %d core system', os.cpus().length);
-
-// check for the main configuration file.
-if(!fs.existsSync('config/config.json')) {
-    winston.log('error','Main configuration file config.json file does not exist.');
-    return;
+    Initialize();
+    _this.poolConfigs = readPoolConfigs();
+    spawnPools();
+    
+    cluster.on('fork', function (worker) {
+        console.log('worker ' + worker.process.pid + ' forked');
+    });
+    
+    cluster.on('exit', function (worker, code, signal) {
+        console.log('worker ' + worker.process.pid + ' died');
+    });
+    
+    cluster.on('listening', function (worker, address) {
+        console.log("A worker is now connected to " + address.address + ":" + address.port);
+    });
+    
+    cluster.on('disconnect', function (worker) {
+        console.log('The worker #' + worker.id + ' has disconnected');
+    });
+    
+    cluster.on('online', function (worker) {
+        console.log("Yay, the worker responded after it was forked");
+    });
+} 
+else if (cluster.isWorker) {
+    console.log("WWWW");
+    new poolWorker();
 }
 
-// try to increase file limits so we can as much as concurrent clients we can
-try {
-    var posix = require('posix');
+function Initialize() {
     
-    // try increasing the open file limits (so the sockets and concurrent connections)
+    console.log("");
+    console.log(" ██╗  ██╗██████╗  ██████╗  ██████╗ ██╗     ".yellow);
+    console.log(" ██║  ██║██╔══██╗██╔═══██╗██╔═══██╗██║     ".yellow);
+    console.log(" ███████║██████╔╝██║   ██║██║   ██║██║     ".yellow);
+    console.log(" ██╔══██║██╔═══╝ ██║   ██║██║   ██║██║     ".yellow);
+    console.log(" ██║  ██║██║     ╚██████╔╝╚██████╔╝███████╗".yellow);
+    console.log(" ╚═╝  ╚═╝╚═╝      ╚═════╝  ╚═════╝ ╚══════╝".yellow);
+    console.log("");
+    console.log("Copyright (C) 2013 - 2014, Coinium project - http://www.coinium.org".magenta);
+    console.log("hpool comes with ABSOLUTELY NO WARRANTY. ".bgRed);
+    console.log("");
+    console.log("You can contribute the development of the project by donating;".green);
+    console.log(" BTC : 18qqrtR4xHujLKf9oqiCsjmwmH5vGpch4D".yellow);
+    console.log(" LTC : LMXfRb3w8cMUBfqZb6RUkFTPaT6vbRozPa".yellow);
+    console.log(" DOGE: DM8FW8REMHj3P4xtcMWDn33ccjikCWJnQr".yellow);
+    console.log(" RDD : Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr".yellow);
+    console.log("");
+    
+    winston.log('info', "Loaded dependencies; server %s, stratum %s", serverModule.version, stratumModule.version);
+    winston.log('info', 'Running on: %s-%s [%s %s]', os.platform(), os.arch(), os.type(), os.release());
+    winston.log('info', 'Running over %d core system', os.cpus().length);
+
+    // check for the main configuration file.
+    if (!fs.existsSync('config/config.json')) {
+        winston.log('error', 'Main configuration file config.json file does not exist.');
+        return;
+    }
+
+    // try to increase file limits so we can as much as concurrent clients we can
     try {
-        posix.setrlimit('nofile', { soft: 100000, hard: 100000 });
-    }
-    catch (e) {
-        winston.log('warn', 'Failed to raise the connection limit as root is required');
-    }
-    finally {        
-        var uid = parseInt(process.env.SUDO_UID); // find the actual user that started the server using sudp.
-        
-        // Set our server's uid to that user
-        if (uid) {
-            process.setuid(uid); // fall-back to the actual user that started the server with sudo.
-            winston.log('info', 'Raised connection limit to 100k, falling back to non-root user');
+        var posix = require('posix');
+
+        // try increasing the open file limits (so the sockets and concurrent connections)
+        try {
+            posix.setrlimit('nofile', { soft: 100000, hard: 100000 });
+        } catch (e) {
+            winston.log('warn', 'Failed to raise the connection limit as root is required');
+        } finally {
+            var uid = parseInt(process.env.SUDO_UID); // find the actual user that started the server using sudp.
+
+            // Set our server's uid to that user
+            if (uid) {
+                process.setuid(uid); // fall-back to the actual user that started the server with sudo.
+                winston.log('info', 'Raised connection limit to 100k, falling back to non-root user');
+            }
         }
+    } catch (e) {
+        winston.log('warn', 'Couldn\'t raise connection limit as posix module is not available');
     }
-} catch (e) {
-    winston.log('warn', 'Couldn\'t raise connection limit as posix module is not available');
 }
 
 function readPoolConfigs() {
@@ -129,6 +164,14 @@ function readPoolConfigs() {
     return configs;
 }
 
-var poolConfigs = readPoolConfigs();
+function spawnPools() {
 
-//var pool = new Pool().start();
+    _this.poolConfigs.forEach(function (config) {
+
+        cluster.fork({
+            config: config
+        });
+
+    });
+}
+
