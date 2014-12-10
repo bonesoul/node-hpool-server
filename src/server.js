@@ -65,6 +65,9 @@ function initialize() {
     console.log(" RDD : Rb9kcLs96VDHTmiXVjcWC2RBsfCJ73UQyr".yellow);
     console.log("");
     
+    // initialize logger transports
+    setupLogger();
+    
     winston.log('info', "Loaded dependencies; server %s, stratum %s", serverModule.version, stratumModule.version);
     winston.log('info', 'Running on: %s-%s [%s %s]', os.platform(), os.arch(), os.type(), os.release());
     winston.log('info', 'Running over %d core system', os.cpus().length);
@@ -96,6 +99,21 @@ function initialize() {
     } catch (e) {
         winston.log('warn', 'Couldn\'t raise connection limit as posix module is not available');
     }
+}
+
+function setupLogger() {
+
+    var logDir = 'log';
+
+    winston.setLevels(winston.config.npm.levels);
+    winston.addColors(winston.config.npm.colors);
+    
+    // make sure the /log directory exists
+    if (!fs.existsSync(logDir)) {
+        fs.mkdirSync(logDir);
+    }
+
+    winston.add(winston.transports.File, { filename: logDir + '/server.log' });
 }
 
 function readPoolConfigs() {
