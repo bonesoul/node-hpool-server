@@ -30,8 +30,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include=".jscsrc" />
-    <Compile Include=".jshintrc" />
     <Compile Include="Makefile" />
     <Compile Include="src\server.js" />
     <Compile Include="src\worker\pool.js" />

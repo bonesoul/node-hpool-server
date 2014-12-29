@@ -33,6 +33,7 @@
     "dependencies": {
         "colors": "^1.0.3",
         "hpool-stratum": "~0.0.3",
+        "hpool-web": "~0.0.2",
         "winston": "*",
         "jsonminify": "*",
         "merge": "*"
@@ -50,10 +51,7 @@
     },
     "scripts": {
         "start": "node src/server.js",
-        "lint": "./node_modules/.bin/jshint .",
-        "checkStyle": "./node_modules/.bin/jscs .",
-        "test": "make test",
-        "posttest": "./node_modules/.bin/istanbul check-coverage && rm -rf coverage"
+        "test": "make test"
     },
     "engines": {
         "node": ">=0.10",
