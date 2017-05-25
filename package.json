@@ -42,7 +42,7 @@
         "posix": "*"
     },
     "devDependencies": {
-        "mocha": "~2.0.1",
+        "mocha": "~3.4.2",
         "should": "*",
         "mitm": "*",
         "jshint": "*",
